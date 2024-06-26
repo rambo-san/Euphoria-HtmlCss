@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euphoria</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .grad {
+      background: linear-gradient(to top, rgb(55, 65, 81), rgb(17, 24, 39), rgb(0, 0, 0))
+    }
+
+    .grad2 {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+    .fade-in.show {
+      opacity: 1;
+    }
+
+    .slide-in-bottom {
+      transform: translateY(100%);
+      transition: transform 1s ease-in-out;
+    }
+    .slide-in-bottom.show {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="grad flex items-center justify-center h-screen text-gray-900">
+  <div class="container mx-auto p-8">
+    <h1 class="text-5xl font-bold text-center text-white fade-in show">REGISTER FOR EUPHORIA</h1>
+    <p class="text-xl text-center text-white mb-8 fade-in show">Fill out the form below to register for the event.</p>
+    <form class="max-w-lg mx-auto p-8 rounded-xl bg-white grad2 slide-in-bottom" id="myForm">
+      <div class="relative z-0 w-full mb-5 group">
+        <input type="text" id="Name" name="Name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="Name" class="peer-focus:font-medium absolute text-sm text-gray-900 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input type="email" id="Email" name="Email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="Email" class="peer-focus:font-medium absolute text-sm text-gray-900 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input type="text" id="College" name="College" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="College" class="peer-focus:font-medium absolute text-sm text-gray-900 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">College</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input type="text" id="Event" name="Event" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="Event" class="peer-focus:font-medium absolute text-sm text-gray-900 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Event</label>
+      </div>
+      <button type="submit" class="neo-button w-full mt-6">Submit</button>
+    </form>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('myForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        fetch('https://script.google.com/macros/s/AKfycbzAY0L-GK7KIXHbcThQmLAS8-lJBUPUOTgGjUMM-CwyZzSg8CRJ8wZT4N1kXM1owlZNxQ/exec', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message); // Display response message from Google Apps Script
+          this.reset(); // Optionally, reset the form
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('There was an error!');
+        });
+      });
+
+      const fadeInElements = document.querySelectorAll('.fade-in');
+      fadeInElements.forEach((element, index) => {
+        setTimeout(() => {
+          element.classList.add('show');
+        }, index * 200);
+      });
+
+      const slideInElement = document.querySelector('.slide-in-bottom');
+      setTimeout(() => {
+        slideInElement.classList.add('show');
+      }, 500);
+    });
+  </script>
+</body>
+</html>
