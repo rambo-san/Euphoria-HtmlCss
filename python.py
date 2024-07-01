@@ -1,31 +1,64 @@
 #!C:\Users\abhis\AppData\Local\Programs\Python\Python312\python.exe
 import cgi
+import mysql.connector 
+from mysql.connector import Error
+import cgitb
+
+# Enable detailed error reporting
+cgitb.enable()
+
+# Send HTTP header
 print("Content-type: text/html\n\n")
-# This line sends an HTTP header specifying that the content is HTML.
 
-# Import the Common Gateway Interface (CGI) module to handle form data.
-
+# Connect to the database
+# Get form data
 form = cgi.FieldStorage()
-# Create a FieldStorage object to parse and store the data submitted via the form.
+name = form.getvalue('Name')
+email = form.getvalue('Email')
+college = form.getvalue('College')
+event = form.getvalue('Event')
 
-username = form.getvalue("Name")
-# Retrieve the value associated with the "username" field from the form data.
+# Connect to the database
+try:
+    connection = mysql.connector.connect(
+        host='localhost',
+        database='euphoria_db',
+        user='root',
+        password=''
+    )
+    if connection.is_connected():
+        db_Info = connection.get_server_info()
+        print("Connected to MySQL Server version ", db_Info)
+        cursor = connection.cursor()
+        cursor.execute("select database();")
+        record = cursor.fetchone()
+        print("You're connected to database: ", record)
+except Error as e:
+    print("Error while connecting to MySQL", e)
 
-# HTML header
-print("<html>")
-print("<head>")
-print("<title>Success Page</title>")
-print("</head>")
-print("<body>")
+# Insert a new student
+try:
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO registration (name, email, college, event) VALUES (%s, %s, %s, %s)", (name, email, college, event))
+    connection.commit()
+except Error as e:
+    print("Error while inserting data to MySQL", e)
 
-# Format the username with <strong> and <span> for larger text
-print("<p><strong><span style='font-size: 20px;'>{}</span></strong> Congratulations !!</p>".format(username))
-# Display a congratulatory message with the submitted username in larger text.
+# Close the connection
+finally:
+    if connection.is_connected():
+        cursor.close()
+        connection.close()
+        print("MySQL connection is closed")
 
-# Print the second line on a new line
-print("<p>You have successfully sent data from an HTML form to a CGI Python script.</p>")
-# Display a message indicating that the form data was successfully processed.
 
-# Close the HTML tags
-print("</body>")
-print("</html>")
+
+# Display a message
+print("<h1>Student added successfully!</h1>")
+print("<p>Name: %s</p>" % name)
+print("<p>Email: %s</p>" % email)
+print("<p>College: %s</p>" % college)
+print("<p>Event: %s</p>" % event)
+
+
+
